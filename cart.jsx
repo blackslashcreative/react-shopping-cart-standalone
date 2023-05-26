@@ -159,10 +159,11 @@ const Products = (props) => {
     console.log(`total updated to ${newTotal}`);
     return newTotal;
   };
+
   // DONE: Implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
-    let newItems = data.map((item) => {
+    let newItems = data.data.map((item) => {
       let { name, country, cost, instock } = item;
       return { name, country, cost, instock };
     });
