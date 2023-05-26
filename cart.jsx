@@ -1,9 +1,9 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples_:", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans__:", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
+  { name: "Apples", country: "Italy", cost: 3, instock: 10 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
+  { name: "Beans", country: "USA", cost: 2, instock: 5 },
+  { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
 ];
 //=========Cart=============
 const Cart = (props) => {
@@ -101,9 +101,9 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.filter((item) => item.name == name);
+    let item = items.find((item) => item.name == name);
     console.log(`add to Cart ${JSON.stringify(item)}`);
-    setCart([...cart, ...item]);
+    setCart([...cart, item]);
     //doFetch(query);
   };
   const deleteCartItem = (index) => {
@@ -120,7 +120,7 @@ const Products = (props) => {
       <li key={index}>
         <Image src={photos[index % 4]} width={70} roundedCircle></Image>
         <Button variant="primary" size="large">
-          {item.name}:{item.cost}
+          {item.name} : {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -160,10 +160,9 @@ const Products = (props) => {
     return newTotal;
   };
 
-  // DONE: Implement the restockProducts function
+  // Implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
-    console.log(`Data *: ${JSON.stringify(data.data)}`);
     let newItems = data.data.map((item) => {
       let { name, country, cost, instock } = item.attributes;
       return { name, country, cost, instock };
