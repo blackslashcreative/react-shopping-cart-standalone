@@ -163,8 +163,9 @@ const Products = (props) => {
   // DONE: Implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
+    console.log(`Data *: ${JSON.stringify(data.data)}`);
     let newItems = data.data.map((item) => {
-      let { name, country, cost, instock } = item;
+      let { name, country, cost, instock } = item.attributes;
       return { name, country, cost, instock };
     });
     setItems([...items, ...newItems]);
