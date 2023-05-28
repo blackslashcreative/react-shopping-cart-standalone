@@ -1,9 +1,9 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
+  { name: "Apples", country: "Italy", cost: 3, instock: 2 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 1 },
+  { name: "Beans", country: "USA", cost: 2, instock: 8 },
+  { name: "Cabbage", country: "USA", cost: 1, instock: 3 },
 ];
 //=========Cart=============
 const Cart = (props) => {
@@ -101,12 +101,15 @@ const Products = (props) => {
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    let item = items.find((item) => item.name == name);
+    let item = items.filter((item) => item.name == name);
+    if (item[0].instock == 0) return;
+    item[0].instock = item[0].instock - 1;
     console.log(`add to Cart ${JSON.stringify(item)}`);
-    setCart([...cart, item]);
-    //doFetch(query);
+    setCart([...cart, ...item]);
   };
-  const deleteCartItem = (index) => {
+  const deleteCartItem = (index, item) => { 
+    //console.log(`item... ${JSON.stringify(item)}`);
+    item.instock = item.instock + 1;
     let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
   };
@@ -132,7 +135,7 @@ const Products = (props) => {
       <Accordion.Header>
         {item.name}
       </Accordion.Header>
-      <Accordion.Body onClick={() => deleteCartItem(index)}
+      <Accordion.Body item={item.name} onClick={() => deleteCartItem(index, item)}
         eventkey={1 + index}>
         $ {item.cost} from {item.country}
       </Accordion.Body>
@@ -163,11 +166,13 @@ const Products = (props) => {
   // Implement the restockProducts function
   const restockProducts = (url) => {
     doFetch(url);
-    let newItems = data.data.map((item) => {
+    const newItems = data.data.map((item) => {
       let { name, country, cost, instock } = item.attributes;
       return { name, country, cost, instock };
     });
-    setItems([...items, ...newItems]);
+    const allItems = [...items, ...newItems];
+    // console.log(allItems); // [{name: 'Apples', country: 'Italy', cost: 3, instock: 2}, {name: 'Oranges', country: 'Spain', cost: 4, instock: 1}, {name: 'Beans', country: 'USA', cost: 2, instock: 8}, {name: 'Cabbage', country: 'USA', cost: 1, instock: 3}, {name: 'Apples', country: 'Italy', cost: 3, instock: 10}, {name: 'Oranges', country: 'Spain', cost: 4, instock: 3}, {name: 'Beans', country: 'USA', cost: 2, instock: 8}, {name: 'Cabbage', country: 'USA', cost: 1, instock: 8}]
+    setItems(allItems);
   };
 
   return (
