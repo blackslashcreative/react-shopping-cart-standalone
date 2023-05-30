@@ -172,7 +172,19 @@ const Products = (props) => {
     });
     const allItems = [...items, ...newItems];
     // console.log(allItems); // [{name: 'Apples', country: 'Italy', cost: 3, instock: 2}, {name: 'Oranges', country: 'Spain', cost: 4, instock: 1}, {name: 'Beans', country: 'USA', cost: 2, instock: 8}, {name: 'Cabbage', country: 'USA', cost: 1, instock: 3}, {name: 'Apples', country: 'Italy', cost: 3, instock: 10}, {name: 'Oranges', country: 'Spain', cost: 4, instock: 3}, {name: 'Beans', country: 'USA', cost: 2, instock: 8}, {name: 'Cabbage', country: 'USA', cost: 1, instock: 8}]
-    setItems(allItems);
+    // Combine Duplicates
+    let uniqueItems = [];
+    allItems.forEach((item) => {
+      if (uniqueItems.filter(e => e.name === item.name).length > 0) {
+        // Sum stock of filtered uniqueItems with item already there?
+        const duplicateItem = uniqueItems.find(e => e.name === item.name);
+        duplicateItem.instock += item.instock;
+      } else {
+        // Add the item to the unique array
+        uniqueItems.push(item);
+      }
+    });
+    setItems(uniqueItems);
   };
 
   return (
